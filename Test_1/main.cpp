@@ -452,11 +452,12 @@ int main()
 			/*uchar neighborhood[9] = { 0 };
 			neighborhood[0] = pCur[j];*/ //中值滤波会用到
 			
-			*(pCur++) = int((*(pCur_Last - 1) + *pCur_Last + *(pCur_Last + 1)
+			*pCur = (*(pCur_Last - 1) + *pCur_Last + *(pCur_Last + 1)
 						+ *(pCur - 1) + *pCur + *(pCur + 1)
 						+ *(pCur_Next - 1) + *pCur_Next + *(pCur_Next + 1)
-						) / 9);
+						) / 9;
 			
+			pCur++; pCur_Last++; pCur_Next++;
 		}
 	}
 
@@ -468,13 +469,17 @@ int main()
 
 	for (int i = 0; i < img.rows; ++i)
 	{
-		uchar *pCur = img_Lena.ptr<uchar>(i);
+		uchar *pCur = img.ptr<uchar>(i);
 
 		for (int j = 0; j < img.cols; ++j)
 		{
 			hist_number[*(pCur++)]++;
 		}
 	}
+
+	//输出像素数目直方图
+	for (int i = 0; i < 256; ++i)
+		cout << "hist_number[" << i << "] = " << hist_number[i] << endl;
 
 	int threshold_OTSU = 0;               //大津阈值
 	double variance_max = 0.0;            //最大类间方差
@@ -527,13 +532,8 @@ int main()
 
 	}
 
-	cout << "threshold_OTSU = " << threshold_OTSU;
-
-	//输出像素数目直方图
-	for (int i = 0; i < 256; ++i)
-		cout << "hist_number[" << i << "] = " << hist_number[i] << endl;
-
-		
+	cout << "threshold_OTSU = " << threshold_OTSU << endl;
+	
 	cv::imshow("Processed_Pic", img);
 
 	cv::Mat img_OTSU = img_Lena.clone();
