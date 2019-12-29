@@ -419,145 +419,227 @@ int main()
 			////system("pause");
 
 
-/* 平滑处理 + 大津阈值分割 */
+	///* 平滑处理 + 大津阈值分割 */
+	//
+	//	string path = "D:\\Work\\Coding\\C++\\Opencv\\code\\Test_1\\Document\\Lena.tif";
+	//	cv::Mat img_Lena = cv::imread(path, 0);//以灰度图打开
+	//	cv::namedWindow("original_Pic", cv::WINDOW_AUTOSIZE);
+	//	cv::namedWindow("Processed_Pic", cv::WINDOW_AUTOSIZE);
+	//	cv::namedWindow("Processed_Pic_OTSU", cv::WINDOW_AUTOSIZE);
+	//	cv::namedWindow("Processed_Pic_OTSU_fromLib", cv::WINDOW_AUTOSIZE);
+	//	if (img_Lena.empty())
+	//	{
+	//		cout << "Cannot find the picture!";
+	//		system("pause");
+	//	}
+	//	
+	//
+	//	//均值滤波
+	//	cv::Mat img = img_Lena.clone();
+	//	cv::imshow("original_Pic", img_Lena);
+	//
+	//	
+	//	
+	//	for (int i = 1; i < img.rows - 1; ++i) //行
+	//	{
+	//
+	//		uchar *pCur_Last = img.ptr<uchar>(i - 1);
+	//		uchar *pCur = img.ptr<uchar>(i);
+	//		uchar *pCur_Next = img.ptr<uchar>(i + 1);
+	//
+	//		for (int j = 1; j < img.cols - 1; ++j) //列
+	//		{
+	//			/*uchar neighborhood[9] = { 0 };
+	//			neighborhood[0] = pCur[j];*/ //中值滤波会用到
+	//			
+	//			*pCur = (*(pCur_Last - 1) + *pCur_Last + *(pCur_Last + 1)
+	//						+ *(pCur - 1) + *pCur + *(pCur + 1)
+	//						+ *(pCur_Next - 1) + *pCur_Next + *(pCur_Next + 1)
+	//						) / 9;
+	//			
+	//			pCur++; pCur_Last++; pCur_Next++;
+	//		}
+	//	}
+	//
+	//	//大津阈值
+	//
+	//	//统计灰度值
+	//	int hist_number[256];
+	//	memset(hist_number, 0, sizeof(int) * 256);
+	//
+	//	for (int i = 0; i < img.rows; ++i)
+	//	{
+	//		uchar *pCur = img.ptr<uchar>(i);
+	//
+	//		for (int j = 0; j < img.cols; ++j)
+	//		{
+	//			hist_number[*(pCur++)]++;
+	//		}
+	//	}
+	//
+	//	//输出像素数目直方图
+	//	for (int i = 0; i < 256; ++i)
+	//		cout << "hist_number[" << i << "] = " << hist_number[i] << endl;
+	//
+	//	int threshold_OTSU = 0;               //大津阈值
+	//	double variance_max = 0.0;            //最大类间方差
+	//	double foreground_proportion = 0.0;   //前景比例
+	//	double background_proportion = 0.0;   //背景比例
+	//	double foreground_grayscale_average = 0.0;
+	//	double background_grayscale_average = 0.0;
+	//
+	//	for (int i = 0; i < 256; ++i)
+	//	{
+	//		int background_sum_number = 0;
+	//		long background_sum_garyscale = 0;
+	//		int foreground_sum_number = 0;
+	//		long foreground_sum_garyscale = 0;
+	//
+	//		float variance = 0.0;//类间方差
+	//
+	//		for (int j = 0; j < i; ++j)//背景
+	//		{
+	//			background_sum_number += hist_number[j];
+	//			background_sum_garyscale += j * hist_number[j];
+	//		}
+	//
+	//		for (int k = i; k < 256; ++k)//前景
+	//		{
+	//			foreground_sum_number += hist_number[k];
+	//			foreground_sum_garyscale += k * hist_number[k];
+	//		}
+	//
+	//		background_proportion = float(background_sum_number) / (img.rows * img.cols);
+	//		foreground_proportion = float(foreground_sum_number) / (img.rows * img.cols);
+	//		
+	//		if (background_sum_number == 0 || foreground_sum_number == 0)
+	//		{
+	//			continue;
+	//		}
+	//
+	//		background_grayscale_average = background_sum_garyscale / background_sum_number;
+	//		foreground_grayscale_average = foreground_sum_garyscale / foreground_sum_number;
+	//
+	//		variance = double(background_proportion * foreground_proportion *
+	//			(foreground_grayscale_average - background_grayscale_average) *
+	//			(foreground_grayscale_average - background_grayscale_average));
+	//
+	//		if (variance > variance_max)
+	//		{
+	//			variance_max = variance;
+	//			threshold_OTSU = i;
+	//		}
+	//
+	//	}
+	//
+	//	cout << "threshold_OTSU = " << threshold_OTSU << endl;
+	//	
+	//	cv::imshow("Processed_Pic", img);
+	//
+	//	cv::Mat img_OTSU = img_Lena.clone();
+	//
+	//	for (int i = 0; i < img_OTSU.rows; ++i)
+	//	{
+	//		uchar *pCur = img_OTSU.ptr<uchar>(i);
+	//
+	//		for (int j = 0; j < img_OTSU.cols; ++j)
+	//		{
+	//			if (*pCur <= threshold_OTSU/* - 20*/)
+	//				*pCur = 0;
+	//			else 
+	//				*pCur = 255;
+	//			pCur++;
+	//		}
+	//	}
+	//
+	//	cv::Mat img_OTSU_fromLib;
+	//	cv::threshold(img_Lena, img_OTSU_fromLib, 0, 255, cv::THRESH_OTSU);
+	//
+	//	cv::imshow("Processed_Pic_OTSU", img_OTSU);
+	//	cv::imshow("Processed_Pic_OTSU_fromLib", img_OTSU_fromLib);
+	//
+	//	cv::waitKey(0);
 
-	string path = "D:\\Work\\Coding\\C++\\Opencv\\code\\Test_1\\Document\\Lena.tif";
-	cv::Mat img_Lena = cv::imread(path, 0);//以灰度图打开
-	cv::namedWindow("original_Pic", cv::WINDOW_AUTOSIZE);
-	cv::namedWindow("Processed_Pic", cv::WINDOW_AUTOSIZE);
-	cv::namedWindow("Processed_Pic_OTSU", cv::WINDOW_AUTOSIZE);
-	cv::namedWindow("Processed_Pic_OTSU_fromLib", cv::WINDOW_AUTOSIZE);
-	if (img_Lena.empty())
+	/* 直方图均衡化 */
+
+	string path = "D:\\Work\\Coding\\C++\\Opencv\\code\\Test_1\\Document\\Pea.tif";
+	cv::Mat img_Pea = cv::imread(path, 0);
+
+	if (img_Pea.empty())
 	{
-		cout << "Cannot find the picture!";
+		cout << "Cannot find the picture!\n";
 		system("pause");
+		system("exit");
 	}
-	
 
-	//均值滤波
-	cv::Mat img = img_Lena.clone();
-	cv::imshow("original_Pic", img_Lena);
+	cv::Mat img_src = img_Pea.clone();
+	unsigned int imgSize = img_src.rows * img_src.cols;
+	unsigned int hist[256] = { 0 };
+	int LUT[256] = { 0 };
 
-	
-	
-	for (int i = 1; i < img.rows - 1; ++i) //行
+	for (int i = 0; i < img_src.rows; ++i)
 	{
+		uchar *pCur = img_src.ptr<uchar>(i);
 
-		uchar *pCur_Last = img.ptr<uchar>(i - 1);
-		uchar *pCur = img.ptr<uchar>(i);
-		uchar *pCur_Next = img.ptr<uchar>(i + 1);
-
-		for (int j = 1; j < img.cols - 1; ++j) //列
+		for (int j = 0; j < img_src.cols; ++j)
 		{
-			/*uchar neighborhood[9] = { 0 };
-			neighborhood[0] = pCur[j];*/ //中值滤波会用到
-			
-			*pCur = (*(pCur_Last - 1) + *pCur_Last + *(pCur_Last + 1)
-						+ *(pCur - 1) + *pCur + *(pCur + 1)
-						+ *(pCur_Next - 1) + *pCur_Next + *(pCur_Next + 1)
-						) / 9;
-			
-			pCur++; pCur_Last++; pCur_Next++;
+			hist[*(pCur++)]++;
 		}
 	}
-
-	//大津阈值
-
-	//统计灰度值
-	int hist_number[256];
-	memset(hist_number, 0, sizeof(int) * 256);
-
-	for (int i = 0; i < img.rows; ++i)
-	{
-		uchar *pCur = img.ptr<uchar>(i);
-
-		for (int j = 0; j < img.cols; ++j)
-		{
-			hist_number[*(pCur++)]++;
-		}
-	}
-
-	//输出像素数目直方图
-	for (int i = 0; i < 256; ++i)
-		cout << "hist_number[" << i << "] = " << hist_number[i] << endl;
-
-	int threshold_OTSU = 0;               //大津阈值
-	double variance_max = 0.0;            //最大类间方差
-	double foreground_proportion = 0.0;   //前景比例
-	double background_proportion = 0.0;   //背景比例
-	double foreground_grayscale_average = 0.0;
-	double background_grayscale_average = 0.0;
 
 	for (int i = 0; i < 256; ++i)
+		cout << "hist[" << i << "] = " << hist[i] << endl;
+
+	//不使用查找表
+	cv::Mat img_dst = img_src.clone();
+
+	//for (int i = 0; i < img_dst.rows; ++i)
+	//{
+	//	uchar *pCur = img_dst.ptr<uchar>(i);
+
+	//	for (int j = 0/*, sum = 0*/; j < img_dst.cols; ++j)
+	//		//这里sum只会初始化一次,在这里初始化sum变量不是好习惯
+	//	{
+	//		int sum = 0;
+
+	//		for (int k = 0; k <= *pCur; ++k)
+	//			//这里，循环嵌套多了对谁都没有好处，Debug太难看出问题来了，以后要避免这种问题
+	//		{
+	//			sum += hist[k];	
+	//		}//这里，每次循环结束后，sum应该被清0
+	//		 //养成好的编程习惯，从定义每一个变量做起！
+
+	//		*pCur = 255 * (float(sum) / float(imgSize));
+
+	//		pCur++;
+	//	}
+	//}
+
+	//使用查找表
+	//查找表，时间复杂度小，算法复杂度小
+	//养成好习惯，写出每个人都能看懂的算法！
+	for (int i = 0, sum = 0; i < 256; ++i)
 	{
-		int background_sum_number = 0;
-		long background_sum_garyscale = 0;
-		int foreground_sum_number = 0;
-		long foreground_sum_garyscale = 0;
-
-		float variance = 0.0;//类间方差
-
-		for (int j = 0; j < i; ++j)//背景
-		{
-			background_sum_number += hist_number[j];
-			background_sum_garyscale += j * hist_number[j];
-		}
-
-		for (int k = i; k < 256; ++k)//前景
-		{
-			foreground_sum_number += hist_number[k];
-			foreground_sum_garyscale += k * hist_number[k];
-		}
-
-		background_proportion = float(background_sum_number) / (img.rows * img.cols);
-		foreground_proportion = float(foreground_sum_number) / (img.rows * img.cols);
-		
-		if (background_sum_number == 0 || foreground_sum_number == 0)
-		{
-			continue;
-		}
-
-		background_grayscale_average = background_sum_garyscale / background_sum_number;
-		foreground_grayscale_average = foreground_sum_garyscale / foreground_sum_number;
-
-		variance = double(background_proportion * foreground_proportion *
-			(foreground_grayscale_average - background_grayscale_average) *
-			(foreground_grayscale_average - background_grayscale_average));
-
-		if (variance > variance_max)
-		{
-			variance_max = variance;
-			threshold_OTSU = i;
-		}
-
+		sum += hist[i];
+		LUT[i] = 255 * (float(sum) / float(imgSize));
 	}
 
-	cout << "threshold_OTSU = " << threshold_OTSU << endl;
-	
-	cv::imshow("Processed_Pic", img);
-
-	cv::Mat img_OTSU = img_Lena.clone();
-
-	for (int i = 0; i < img_OTSU.rows; ++i)
+	for (int i = 0; i < img_dst.rows; ++i)
 	{
-		uchar *pCur = img_OTSU.ptr<uchar>(i);
+		uchar *pCur = img_dst.ptr<uchar>(i);
 
-		for (int j = 0; j < img_OTSU.cols; ++j)
+		for (int j = 0; j < img_dst.cols; ++j)
 		{
-			if (*pCur <= threshold_OTSU/* - 20*/)
-				*pCur = 0;
-			else 
-				*pCur = 255;
-			pCur++;
+
+			*(pCur++) = LUT[*pCur];
+
 		}
 	}
 
-	cv::Mat img_OTSU_fromLib;
-	cv::threshold(img_Lena, img_OTSU_fromLib, 0, 255, cv::THRESH_OTSU);
-
-	cv::imshow("Processed_Pic_OTSU", img_OTSU);
-	cv::imshow("Processed_Pic_OTSU_fromLib", img_OTSU_fromLib);
-
+	cv::namedWindow("Original_picture", cv::WINDOW_AUTOSIZE);
+	cv::namedWindow("Processed_picture", cv::WINDOW_AUTOSIZE);
+	cv::imshow("Original_picture", img_src);
+	cv::imshow("Processed_picture", img_dst);
 	cv::waitKey(0);
 
 	return 0;
